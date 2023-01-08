@@ -1,9 +1,13 @@
-require("dotenv").config();
+if (process.env.NODE_ENV !== "production")
+  require("dotenv").config({ path: ".env" });
 
 const express = require("express");
 const path = require("path");
 const app = express();
 
+const PORT = process.env.PORT || 3000;
+
+app.set("port", PORT);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
@@ -19,4 +23,6 @@ app.use((req, res, next) => {
   error.status = 404;
   next(error);
 });
-app.listen(3000);
+app.listen(app.get("port"), () =>
+  console.log("Running on port: ", app.get("port"))
+);
