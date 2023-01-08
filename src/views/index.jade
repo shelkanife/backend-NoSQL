@@ -1,0 +1,51 @@
+extends layout
+
+block content
+    h1= title
+    p Welcome to #{title}
+
+    form(action="/add",method="post")
+        div.row.mb-2
+            div.col-8
+                label.form-label Item Name: 
+                input.form-control(name="name",type="text")
+            div.col-4
+                label.form-label Item Category: 
+                select.form-select(name="category")
+                    - each category in categories
+                        option(value="#{category.category}") #{category.category}
+        input.btn.btn-success.w-100(type="submit",value="Añadir tarea")
+    hr
+
+    form(action="/complete",method='post')
+        table.table.table-stripped.table-bordered
+            tr
+                td Nombre
+                td Categoria
+                td Fecha
+                td Finalizado
+            if (!tasks.length)
+                tr
+                    td(colspan="4") Sin pendientes
+            else
+                - each task in tasks
+                    tr
+                        td #{task.name}
+                        td #{task.category}
+                        - const date = new Date(task.date);
+                        - const day = date.getDay();
+                        - const month = date.getMonth() + 1;
+                        - const year = date.getFullYear();
+                        td #{day + "/" + month + "/" + year}
+                        td
+                            if (task.completed)
+                                input(type="checkbox", name="#{task.id}", value="#{!task.completed}", checked, disabled)
+                            else
+                                input(type="checkbox", name="#{task.id}", value="#{!task.completed}")
+                div.d-flex
+                    button.btn.btn-primary.mb-3.ms-auto(type="submit") Actualizar tareas
+    
+ 
+
+
+
